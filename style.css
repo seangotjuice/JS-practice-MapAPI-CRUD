@@ -218,3 +218,10 @@ a:visited {
 .cycling-popup .leaflet-popup-content-wrapper {
   border-left: 5px solid var(--color-brand--1);
 }
+
+.CRUD {
+  display: flex;
+  justify-content: space-around;
+  height: 20.4px;
+  margin-bottom: 5px;
+}

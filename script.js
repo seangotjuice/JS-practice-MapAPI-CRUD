@@ -85,10 +85,12 @@ class App {
     // get data from local storage
     this._getLocalStorage();
 
-    // Event handlers
+    // -------Event handlers--------
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
+    //
+    // containerWorkouts.addEventListener('click', this._CRUD(this));
   }
 
   _getPosition() {
@@ -246,8 +248,12 @@ class App {
       </div>
       </div>
       <div class="right">
-      <span>×</span>
-      
+      <div class="CRUD">
+     
+      <div class="edit">edit</div>
+      <div class="delete">x</div>
+      </div>
+
       
       
     `;
@@ -278,14 +284,21 @@ class App {
       <span class="workout__value">${workout.elevationGain}</span>
       <span class="workout__unit">m</span>
     </div>
+    </div>
+
   </li>
 `;
     form.insertAdjacentHTML('afterend', html); // add as a sibling after form
   }
   _moveToPopup(e) {
     // event delegation: 不管點擊到div, span都會往上去找到 class 是 workout的人 -> 取得id
+
     const workoutEl = e.target.closest('.workout');
     if (!workoutEl) return; // guard class
+    if (e.target.matches('.delete')) {
+      return this._deleteWorkout(workoutEl);
+    }
+    if (e.target.matches('.edit')) this._editWorkokut(workoutEl);
     const workout = this.#workouts.find(
       work => work.id === workoutEl.dataset.id
     );
@@ -318,6 +331,25 @@ class App {
     localStorage.removeItem('workout');
     // 重整頁面
     location.reload();
+  }
+
+  _deleteWorkout(workout) {
+    console.log('deleted');
+    console.log(workout);
+    console.log(this.#workouts);
+
+    const workoutId = workout.getAttribute('data-id');
+    console.log(workoutId);
+
+    this.#workouts = this.#workouts.filter(w => w.id !== workoutId);
+    console.log(this.#workouts);
+
+    // this.#workouts.pop(workout);
+    this._setLocalStorage();
+    workout.remove();
+  }
+  _editWorkokut(workout) {
+    console.log('edit');
   }
 }
 
