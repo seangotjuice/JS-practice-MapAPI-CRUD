@@ -89,8 +89,6 @@ class App {
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
-    //
-    // containerWorkouts.addEventListener('click', this._CRUD(this));
   }
 
   _getPosition() {
@@ -120,7 +118,9 @@ class App {
 
     // console.log(this); // undefined!! why?
     // 因為this._loadMap 被當作regular function 呼叫而不是method , 被當method呼叫才會有this可以用，反之則this undefined
+
     this.#map.on('click', this._showForm.bind(this));
+    console.log(this);
 
     // 要知道marker必須要在map load完之後才能貼上去
     this.#workouts.forEach(work => {
@@ -128,7 +128,9 @@ class App {
     });
   }
   _showForm(mapE) {
+    console.log(mapE);
     this.#mapEvent = mapE;
+    console.log(this.#mapEvent);
     form.classList.remove('hidden');
     inputDistance.focus();
   }
@@ -292,13 +294,13 @@ class App {
   }
   _moveToPopup(e) {
     // event delegation: 不管點擊到div, span都會往上去找到 class 是 workout的人 -> 取得id
-
-    const workoutEl = e.target.closest('.workout');
+    const clickedEl = e.target;
+    const workoutEl = clickedEl.closest('.workout');
     if (!workoutEl) return; // guard class
-    if (e.target.matches('.delete')) {
+    if (clickedEl.matches('.delete')) {
       return this._deleteWorkout(workoutEl);
     }
-    if (e.target.matches('.edit')) this._editWorkokut(workoutEl);
+    if (clickedEl.matches('.edit')) this._editWorkokut(workoutEl);
     const workout = this.#workouts.find(
       work => work.id === workoutEl.dataset.id
     );
@@ -350,6 +352,8 @@ class App {
   }
   _editWorkokut(workout) {
     console.log('edit');
+    this._deleteWorkout(workout);
+    this._showForm();
   }
 }
 
